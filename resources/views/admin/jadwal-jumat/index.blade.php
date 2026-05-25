@@ -1,0 +1,67 @@
+@extends('layouts.app')
+
+@section('title', 'Jadwal Sholat Jumat')
+
+@section('content')
+    <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-xl p-6">
+        <!-- Header + Tombol PDF & Tambah -->
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+            <h2 class="text-2xl font-bold text-white">Jadwal Solat Jumat</h2>
+            <div class="flex gap-3">
+                <a href="{{ route('admin.jadwal-jumat.export') }}"
+                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition flex items-center gap-2">
+                    Download PDF
+                </a>
+                <a href="{{ route('admin.jadwal-jumat.create') }}"
+                    class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition flex items-center gap-2">
+                    <i class="ri-add-line"></i> Tambah Jadwal
+                </a>
+            </div>
+        </div>
+        <form method="GET" class="mb-6">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari khatib / imam / tema..."
+                class="w-full md:w-1/3 bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500">
+        </form>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-slate-300">
+                <thead class="text-xs uppercase bg-slate-700/50 text-slate-200">
+                    <tr>
+                        <th class="px-4 py-3">Tanggal</th>
+                        <th class="px-4 py-3">Khatib</th>
+                        <th class="px-4 py-3">Imam</th>
+                        <th class="px-4 py-3">Tema</th>
+                        <th class="px-4 py-3">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-700">
+                    @forelse($jadwal as $j)
+                        <tr class="hover:bg-slate-700/30 transition">
+                            <td class="px-4 py-2">{{ \Carbon\Carbon::parse($j->tanggal_jumat)->format('d/m/Y') }}</td>
+                            <td class="px-4 py-2">{{ $j->khatib }}</td>
+                            <td class="px-4 py-2">{{ $j->imam }}</td>
+                            <td class="px-4 py-2">{{ $j->tema_khutbah }}</td>
+                            <td class="px-4 py-2 flex gap-3">
+                                <a href="{{ route('admin.jadwal-jumat.edit', $j) }}"
+                                    class="text-blue-400 hover:text-blue-300">Edit</a>
+                                <form action="{{ route('admin.jadwal-jumat.destroy', $j) }}" method="POST"
+                                    onsubmit="return confirm('Yakin hapus jadwal ini?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="text-red-400 hover:text-red-300">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-8 text-slate-400">Belum ada jadwal Jumat.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6">
+            {{ $jadwal->links() }}
+        </div>
+    </div>
+@endsection

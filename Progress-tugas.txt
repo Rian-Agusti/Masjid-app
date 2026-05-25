@@ -1,0 +1,69 @@
+Progress Tugas - Ringkasan Struktur Proyek
+
+Tujuan: File ringkasan struktur folder penting proyek Laravel untuk diberikan ke AI. Hanya mencantumkan folder dan file relevan; folder besar yang tidak perlu (node_modules, vendor) tidak disertakan.
+
+1. Root (berkas penting)
+- artisan: skrip CLI Laravel (jalankan migrasi, test, dll.)
+- composer.json / composer.lock: dependensi PHP
+- package.json: dependensi frontend (npm/yarn)
+- .env: konfigurasi lingkungan (database, mail, dll.) — jangan commit ke VCS
+- bootstrap/app.php: bootstrap aplikasi
+
+2. app/
+- app/Http/
+  - Controllers/: controller HTTP (logika permintaan)
+  - Middleware/: middleware untuk request lifecycle
+  - Requests/: form request validation
+- app/Models/: model Eloquent (representasi tabel DB)
+- app/Console/: command artisan kustom
+- app/Providers/: service providers (registrasi binding, event, config)
+- app/Exceptions/: penanganan exception
+Catatan: fokus utama untuk logika backend ada di app/Http dan app/Models.
+
+3. routes/
+- web.php: rute web (session/csrf, views)
+- api.php: rute API (stateless, biasanya prefix /api)
+- console.php, channels.php: rute console dan broadcast channel
+Referensi untuk AI: lihat route yang meregister controller dan middleware terkait.
+
+4. resources/
+- views/: blade templates (antarmuka server-rendered)
+- lang/: file terjemahan
+- assets (js/css) atau resources/js / resources/css: sumber frontend sebelum dibundel
+Catatan: hasil bundel ada di public/ setelah build (vite/webpack).
+
+5. database/
+- migrations/: skema tabel
+- seeders/: data awal untuk pengujian/dev
+- factories/: factory model untuk testing
+Penting untuk memahami struktur data dan relasi model.
+
+6. config/
+- File konfigurasi (app.php, database.php, queue.php, etc.) — menjelaskan pengaturan lingkungan.
+
+7. public/
+- index.php: entry point HTTP
+- assets yang disajikan publik (gambar, hasil bundel JS/CSS)
+
+8. storage/ dan bootstrap/cache
+- storage/logs/: log aplikasi
+- storage/framework/: cache sesi/compiled views
+Catatan: storage penting untuk debugging dan penyimpanan file upload.
+
+9. tests/
+- Feature/: test end-to-end/HTTP
+- Unit/: test unit
+Sertakan file test yang relevan saat meminta bantuan AI untuk verifikasi fungsional.
+
+10. Hal yang DIABAIKAN (tidak perlu diberikan ke AI)
+- node_modules/ (frontend dependencies) — sangat besar
+- vendor/ (composer dependencies) — library pihak ketiga
+- .git/ (history), .env (rahasia)
+- build outputs yang bisa diregenerasi (public/build, dist)
+
+Petunjuk penggunaan untuk AI:
+- Tunjukkan file spesifik jika butuh konteks (contoh: routes/api.php, app/Http/Controllers/AuthController.php, database/migrations/*create_users_table.php)
+- Sertakan potongan .env.example atau konfigurasi DB jika perlu koneksi lokal
+- Beri tahu tujuan (bugfix, fitur baru, refactor, testing) agar AI fokus pada area relevan
+
+Selesai.
